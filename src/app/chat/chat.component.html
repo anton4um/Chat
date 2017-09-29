@@ -3,7 +3,7 @@
 </div>
 <!--
 </div>-->
-<input [(ngModel)]="nickname"  /><input [(ngModel)]="orderMessage"  /><button (click)="(room.inRoom)?sendMessageToRoom():sendMessage()">Send</button>
+<input [(ngModel)]="orderMessage"  /><button (click)="(room?.inRoom)?sendMessageToRoom():sendMessage()">Send</button>
 <div *ngFor="let user of user_names" (click)="selectedUser(user)">
-    {{user.name}}
+    {{user?.name}}
   </div>

@@ -5,7 +5,9 @@ import {Socket} from 'ng2-socket-io';
 import {Injectable} from '@angular/core';
 let source;
 @Injectable()
+
 export class ChatService {
+   name: string;
   constructor(private socket: Socket) {}
   sendMessage(message) {
     this.socket.emit('message', message);
@@ -18,7 +20,7 @@ export class ChatService {
   }
 
   login(login) {
-    this.socket.emit('login', login);
+   this.socket.emit('login', login);
   }
   getUserNames () {
    source = this.socket.fromEvent('user_names_ids');

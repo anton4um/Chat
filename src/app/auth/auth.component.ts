@@ -17,7 +17,7 @@ name: string;
 Submit(name: string) {
     this.chatService.login(name);
     // console.log(name);
-    this.router.navigate(['chat']);
+    this.router.navigate(['chat/', name]);
 }
   ngOnInit() {
   }

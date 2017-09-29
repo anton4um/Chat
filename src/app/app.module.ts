@@ -5,6 +5,7 @@ import { HttpModule} from '@angular/http';
 import {SocketIoModule, SocketIoConfig} from 'ng2-socket-io';
 import {ChatService} from './ChatService';
 import {Routes, RouterModule} from "@angular/router";
+import {PopupModule} from 'ng2-opd-popup';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
@@ -12,8 +13,13 @@ import { ChatComponent } from './chat/chat.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:8080', options: {} }
 const routes: Routes = [
+  {
+    path: '',
+    redirectTo: '/auth',
+    pathMatch: 'full'
+  },
   {path : 'auth', component: AuthComponent},
-  {path: 'chat', component: ChatComponent}
+  {path: 'chat/:name', component: ChatComponent}
   ]
 @NgModule({
   declarations: [
@@ -27,6 +33,7 @@ const routes: Routes = [
     FormsModule,
     HttpModule,
     SocketIoModule.forRoot(config),
+    PopupModule.forRoot(),
   ],
   providers: [ChatService],
   bootstrap: [AppComponent]

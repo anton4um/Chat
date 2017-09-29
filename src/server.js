@@ -14,16 +14,11 @@ app.get('/',function (req, res) {
   //res.sendfile(__dirname + '/index_test.html');
 });
 var messages = [];
-var username;
-var users = {};
 var user_names = [];
-var JSon;
 var client_id;
 var obj = {};
-var clients = {};
-var socket;
-var obj_socket;
 var selected_client;
+var room;
 io.on('connection', function (client) {
 
       if(user_names[0] != undefined) {
@@ -34,47 +29,59 @@ io.on('connection', function (client) {
 
   console.log(user_names);
   console.log('Connected');
-client.on('login', function (data) {
-  obj = {name: data ,client_id:  client.id};
-  obj_socket = client;
-  user_names.push(obj);
-  console.log('User connected', data);
-  users[data] = client.id;
-  io.emit('user_names_ids',user_names);
+    client.on('login', function (data) {
+      obj = {name: data ,client_id:  client.id};
+      //obj_socket = client;
+      user_names.push(obj);
+      console.log('User connected', user_names);
+      //users[data] = client.id;
+      io.emit('user_names_ids',user_names);
 
 
-});
-  client.on('user_names_ids', function (data) {
+    });
+    client.on('user_names_ids', function (data) {
 
-    client_id = data.client_id;
-    console.log('Client ID: ',client_id);
+      client_id = data.client_id;
+      console.log('Client ID: ',client_id);
 
-    console.log('we have client id',data);
-    var room = uuid();
-    selected_client = io.sockets.connected[client_id];
-    client.join(room);
-    selected_client.join(room);
-    io.to(room).emit('message',' you are joined to room: '+room);
-    io.to(room).emit('is_in_room',{inRoom: true, room: room});
+      console.log('we have client id',data);
+      room = uuid();
+      selected_client = io.sockets.connected[client_id];
+      client.join(room);
+      selected_client.join(room);
+      io.to(room).emit('message',' you are joined to room: '+room);
+      io.to(room).emit('is_in_room',{inRoom: true, room: room});
 
 
-  });
+    });
 
-  client.on('from_room', function (data) {
-    console.log(data);
-    io.to(data.room).emit('from_room',{name: data.name, msg: data.msg});
-  });
-  
+    client.on('from_room', function (data) {
+      console.log(data);
+      io.to(data.room).emit('from_room',{name: data.name, msg: data.msg});
+    });
+
   //client.emit('message', {hello: 'Guest'});
-  client.on('message',function (data) {
-    console.log('data is: ',data.name +' ' + data.msg);
-    //client.emit('message',{hello: 'Hello ' + data});
-    io.emit('message',data)//{hello: 'привет от' + data});
-    messages.push(data);
-    console.log('sanded');
+    client.on('message',function (data) {
+      console.log('data is: ',data.name +' ' + data.msg);
+      //client.emit('message',{hello: 'Hello ' + data});
+      io.emit('message',data)//{hello: 'привет от' + data});
+      messages.push(data);
+      console.log('sanded');
 
 
+    });
+  client.on('disconnect', function () {
+    console.log(client.id);
+    //console.log(user_names.length)
+    for(var i=0; i<user_names.length; i++){
+     // console.log(user_names[i]);
+      if(user_names[i].client_id === client.id){
+        console.log('user disconnected: ',user_names[i].name);
+        console.log(user_names.splice(i,1));
+        io.emit('user_names_ids',user_names);
+      }
+    }
+    console.log('on disconnect', user_names);
   });
-
 });
 
