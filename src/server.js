@@ -11,6 +11,7 @@ var io = socket.listen(app.listen(8080));
 ;
 app.get('/',function (req, res) {
   res.writeHead(200,{'Content-Type':'text/html;charset=utf-8'});
+  res.end();
   //res.sendfile(__dirname + '/index_test.html');
 });
 var messages = [];
@@ -21,7 +22,7 @@ var selected_client;
 var room;
 io.on('connection', function (client) {
 
-      if(user_names[0] != undefined) {
+      if(user_names.length > 0) {
         io.emit('user_names_ids', user_names);
       }
   //client.emit('message', messages);
@@ -64,7 +65,7 @@ io.on('connection', function (client) {
     client.on('message',function (data) {
       console.log('data is: ',data.name +' ' + data.msg);
       //client.emit('message',{hello: 'Hello ' + data});
-      io.emit('message',data)//{hello: 'привет от' + data});
+      io.emit('message',data);//{hello: 'привет от' + data});
       messages.push(data);
       console.log('sanded');
 

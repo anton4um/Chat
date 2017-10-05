@@ -24,7 +24,7 @@ export class ChatComponent implements OnInit{
 
 
   sendMessage() {
-    this.chatService.sendMessage({name: this.nickname, msg: this.orderMessage});
+    this.chatService.sendMessage({name: this.nickname, msg: this.orderMessage.toString('UTF-8')});
   }
   sendMessageToRoom () {
     this.chatService.sendMessageToRoom({name: this.nickname, msg: this.orderMessage, room: this.room.room});
