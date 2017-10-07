@@ -10,13 +10,13 @@ export class ChatService {
    name: string;
   constructor(private socket: Socket) {}
   sendMessage(message) {
-    this.socket.emit('message', message);
+    this.socket.emit('message', message.msg.toString('utf-8'));
   }
   sendMessageToRoom(message) {
     this.socket.emit('from_room', message);
   }
   getMessage() {
-    return this.socket.fromEvent<any>('message');
+    return this.socket.fromEvent('message');
   }
 
   login(login) {

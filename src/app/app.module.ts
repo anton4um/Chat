@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule} from '@angular/http';
 import {SocketIoModule, SocketIoConfig} from 'ng2-socket-io';
 import {ChatService} from './ChatService';
-import {Routes, RouterModule} from "@angular/router";
+import {Routes, RouterModule} from '@angular/router';
 import {PopupModule} from 'ng2-opd-popup';
+import {BrowserAnimationsModule} from '@angular/animations';
 
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';

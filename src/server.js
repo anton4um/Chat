@@ -8,9 +8,9 @@ var app = express();
 
 var io = socket.listen(app.listen(8080));
 
-;
+
 app.get('/',function (req, res) {
-  res.writeHead(200,{'Content-Type':'text/html;charset=utf-8'});
+  res.writeHead(200,{'Content-Type':'text/html;charset=windows-1251'});
   res.end();
   //res.sendfile(__dirname + '/index_test.html');
 });
@@ -20,6 +20,9 @@ var client_id;
 var obj = {};
 var selected_client;
 var room;
+
+
+
 io.on('connection', function (client) {
 
       if(user_names.length > 0) {
