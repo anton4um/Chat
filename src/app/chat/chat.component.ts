@@ -1,12 +1,16 @@
-import {Component, DoCheck, OnInit, ViewChild} from '@angular/core';
-import {Socket} from 'ng2-socket-io';
+import {Component, DoCheck, OnInit, ViewChild, } from '@angular/core';
+import {Socket} from 'ng-socket-io';
 import {ChatService} from '../ChatService';
 import {ActivatedRoute} from '@angular/router';
 import {Popup} from 'ng2-opd-popup';
+import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
+
+
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.css']
+  styleUrls: ['./chat.component.css'],
+
 })
 export class ChatComponent implements OnInit{
   data: any;
@@ -20,21 +24,26 @@ export class ChatComponent implements OnInit{
   obj: any;
   sockets: any;
   room: any;
-  selectedEl = [];
+  optionsModel1: string;
+  optionsModel: number[];
+  myOptions: IMultiSelectOption[] = [];
+
+  dropdownList = [];
+  selectedItems = [];
+
   @ViewChild('inputOrder') inputOrder: HTMLElement;
   constructor(private popup: Popup, private chatService: ChatService, private socket: Socket, private route: ActivatedRoute) {
   }
 
-  setSelected(selectedElement) {
-  //  console.log(selectedElement);
-    this.selectedEl.push(selectedElement);
-    for ( let i = 0; i < this.selectedEl.length; i++){
-       this.selectedEl[i].options.selected = true;
-       console.log(this.selectedEl[i]);
-     }
-  }
+
 popupShow() {
     this.popup.show();
+    console.log('this is user_names', this.user_names);
+    for (let i = 0; i < this.user_names.length; i++) {
+      this.dropdownList.push({id: this.user_names[i].client_id, itemName: this.user_names[i].name});
+    }
+    console.log('this is myOptions', this.selectedItems );
+
 }
 
   sendMessage() {
@@ -52,7 +61,8 @@ popupShow() {
     this.chatService.getIsInRoom().subscribe(room => this.room = room);
 
     this.route.params.subscribe(params => this.nickname = params['name']);
-    console.log(this.nickname);
+    // console.log(this.nickname);
+
   }
   selectedUser (user) {
     this.chatService.sendUserName(user);

@@ -1,7 +1,7 @@
 /**
  * Created by ant on 10.09.2017.
  */
-import {Socket} from 'ng2-socket-io';
+import {Socket} from 'ng-socket-io';
 import {Injectable} from '@angular/core';
 let source;
 @Injectable()

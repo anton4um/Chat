@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Socket} from 'ng2-socket-io';
+import {Socket} from 'ng-socket-io';
 import {ChatService} from './ChatService';
 
 

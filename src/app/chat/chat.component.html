@@ -3,12 +3,17 @@
 </div>
 
 <popup>
-  <form name="form">
-    <select #selectListUsers name="list_users" multiple (change)="setSelected($event.target)&&$event.stopPropagation()" >
-      <option #option *ngFor="let user of user_names" >{{user?.name}}</option>
+ <!-- <ss-multiselect-dropdown [options]="myOptions" [(ngModel)]="optionsModel" (ngModelChange)="onChange($event)">
+ </ss-multiselect-dropdown>
+  <form>
+    <select multiple [(ngModel)]="optionsModel1" [ngModelOptions]="{standalone: true}">
+      <option *ngFor="let user of user_names" [ngValue]="user">{{user.name}}</option>
     </select>
-
   </form>
+-->
+  <angular2-multiselect [data]="dropdownList" [(ngModel)]="selectedItems">
+
+  </angular2-multiselect>
 </popup>
 <input [(ngModel)]="orderMessage" #inputOrder /><button (click)="(room?.inRoom)?sendMessageToRoom():sendMessage()">Send</button>
 <button (click)="popupShow()">Добавить пользователей в комнату</button>
