@@ -10,10 +10,19 @@ export class ChatService {
    name: string;
   constructor(private socket: Socket) {}
   sendMessage(message) {
-    this.socket.emit('message', message.msg.toString('utf-8'));
+    this.socket.emit('message', message);
   }
   sendMessageToRoom(message) {
     this.socket.emit('from_room', message);
+  }
+  sendUserName(username: any) {
+    this.socket.emit('user_names_ids', username);
+  }
+
+
+
+  getUsersInRoom(){
+    return this.socket.fromEvent('users_in_room');
   }
   getMessage() {
     return this.socket.fromEvent('message');
@@ -26,9 +35,7 @@ export class ChatService {
    source = this.socket.fromEvent('user_names_ids');
    return source;
   }
-  sendUserName(username: any) {
-    this.socket.emit('user_names_ids', username);
-  }
+
   getPrivet () {
     return this.socket.fromEvent<any>('test_event');
   }

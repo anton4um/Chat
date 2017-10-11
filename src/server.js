@@ -20,52 +20,77 @@ var client_id;
 var obj = {};
 var selected_client;
 var room;
-
-
+var usersInRoom=[];
+var currentRoom2;
+function whoInRoom(room) {
+  var currentRoom = io.sockets.adapter.rooms[room];
+  user_names.forEach(function (user) {
+    if(currentRoom.sockets[user.client_id] === true){
+      usersInRoom.push(user);
+    }
+  })
+}
 
 io.on('connection', function (client) {
-
       if(user_names.length > 0) {
         io.emit('user_names_ids', user_names);
       }
-  //client.emit('message', messages);
-
-
   console.log(user_names);
   console.log('Connected');
-    client.on('login', function (data) {
-      obj = {name: data ,client_id:  client.id};
-      //obj_socket = client;
-      user_names.push(obj);
+  client.on('login', function (data) {
+      user_names.push({name: data ,client_id:  client.id, room: ''});
       console.log('User connected', user_names);
-      //users[data] = client.id;
       io.emit('user_names_ids',user_names);
 
 
     });
-    client.on('user_names_ids', function (data) {
+  client.on('user_names_ids', function (data) {
+    console.log('data is in user_names_ids: ',data);
 
-      client_id = data.client_id;
-      console.log('Client ID: ',client_id);
-
-      console.log('we have client id',data);
       room = uuid();
-      selected_client = io.sockets.connected[client_id];
-      client.join(room);
-      selected_client.join(room);
+      if(data.length>0) {
+        client.join(room);
+      }
+      for(var i=0; i<data.length;i++){
+        for(var j=0; j<user_names.length;j++){
+          if(user_names[j].client_id===data[i].id){
+            user_names[j].room = room;
+          }
+        }
+        client_id = data[i].id;
+        selected_client = io.sockets.connected[client_id];
+        if(selected_client !== undefined) {
+          selected_client.join(room);
+        }
+      }
+      user_names.forEach(function (users) {
+        if(users.client_id === client.id){
+          users.room = room;
+
+        }
+      })
+      whoInRoom(room);
+      //console.log(usersInRoom);
+      //console.log('rooms from adapter room',io.sockets.adapter.rooms[room]);
       io.to(room).emit('message',' you are joined to room: '+room);
       io.to(room).emit('is_in_room',{inRoom: true, room: room});
+      io.to(room).emit('users_in_room',usersInRoom);
+      console.log('users in room: ',usersInRoom);
+      console.log('user_names: ',user_names);
+      usersInRoom = [];
+    console.log('rooms from io',io.sockets.adapter.rooms);
 
+    console.log('you are now leaved all rooms',client.rooms);
 
-    });
+  });
 
-    client.on('from_room', function (data) {
+  client.on('from_room', function (data) {
       console.log(data);
       io.to(data.room).emit('from_room',{name: data.name, msg: data.msg});
     });
 
-  //client.emit('message', {hello: 'Guest'});
-    client.on('message',function (data) {
+
+  client.on('message',function (data) {
       console.log('data is: ',data.name +' ' + data.msg);
       //client.emit('message',{hello: 'Hello ' + data});
       io.emit('message',data);//{hello: 'привет от' + data});
@@ -74,6 +99,17 @@ io.on('connection', function (client) {
 
 
     });
+
+
+  /*client.on('is_in_room', function (data) {
+  //  console.log('current room: ',data.room);
+    currentRoom2 = data.room;
+    console.log(currentRoom2);
+
+    console.log('on disconnect user from room', usersInRoom);
+
+  });
+  */
   client.on('disconnect', function () {
     console.log(client.id);
     //console.log(user_names.length)
@@ -84,7 +120,17 @@ io.on('connection', function (client) {
         console.log(user_names.splice(i,1));
         io.emit('user_names_ids',user_names);
       }
+      if(user_names[i].room !== ''){
+        client.leave(user_names[i].room);
+        whoInRoom(user_names[i].room);
+        io.to(user_names[i].room).emit('users_in_room',usersInRoom);
+        console.log('users in room: ',usersInRoom);
+        usersInRoom = [];
+      }
     }
+
+
+
     console.log('on disconnect', user_names);
   });
 });

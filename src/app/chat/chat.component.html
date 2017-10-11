@@ -2,22 +2,18 @@
   info{{message}}-{{message?.name}}:{{message?.msg}}
 </div>
 
-<popup>
- <!-- <ss-multiselect-dropdown [options]="myOptions" [(ngModel)]="optionsModel" (ngModelChange)="onChange($event)">
- </ss-multiselect-dropdown>
-  <form>
-    <select multiple [(ngModel)]="optionsModel1" [ngModelOptions]="{standalone: true}">
-      <option *ngFor="let user of user_names" [ngValue]="user">{{user.name}}</option>
-    </select>
-  </form>
--->
-  <angular2-multiselect [data]="dropdownList" [(ngModel)]="selectedItems">
+<popup (confirmClick)="popupConfirmClick()">
+
+  <angular2-multiselect [data]="dropdownList" [(ngModel)]="selectedUsers" [settings]="dropdownSettings">
 
   </angular2-multiselect>
 </popup>
 <input [(ngModel)]="orderMessage" #inputOrder /><button (click)="(room?.inRoom)?sendMessageToRoom():sendMessage()">Send</button>
 <button (click)="popupShow()">Добавить пользователей в комнату</button>
-<div *ngFor="let user of user_names" (click)="selectedUser(user)">
-
+<div *ngFor="let user of user_names">
     {{user?.name}}
-  </div>
+</div>
+<p>Users in ROOM:</p>
+<div *ngFor="let userInRoom of usersInRoom">
+  {{userInRoom.name}}
+</div>

@@ -1,9 +1,10 @@
-import {Component, DoCheck, OnInit, ViewChild, } from '@angular/core';
+import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import {Socket} from 'ng-socket-io';
 import {ChatService} from '../ChatService';
 import {ActivatedRoute} from '@angular/router';
 import {Popup} from 'ng2-opd-popup';
 import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
+
 
 
 @Component({
@@ -12,7 +13,7 @@ import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
   styleUrls: ['./chat.component.css'],
 
 })
-export class ChatComponent implements OnInit{
+export class ChatComponent implements OnInit, OnDestroy {
   data: any;
   messages0: any;
   messages = [];
@@ -24,12 +25,21 @@ export class ChatComponent implements OnInit{
   obj: any;
   sockets: any;
   room: any;
-  optionsModel1: string;
-  optionsModel: number[];
-  myOptions: IMultiSelectOption[] = [];
 
+  usersInRoom: any;
   dropdownList = [];
-  selectedItems = [];
+  selectedUsers = [];
+
+
+  dropdownSettings = {
+    singleSelection: false,
+    text: 'Select Users',
+    selectAllText: 'Select All',
+    unSelectAllText: 'UnSelect All',
+    enableSearchFilter: true,
+    classes: 'myclass custom-class'
+  };
+
 
   @ViewChild('inputOrder') inputOrder: HTMLElement;
   constructor(private popup: Popup, private chatService: ChatService, private socket: Socket, private route: ActivatedRoute) {
@@ -37,17 +47,33 @@ export class ChatComponent implements OnInit{
 
 
 popupShow() {
-    this.popup.show();
-    console.log('this is user_names', this.user_names);
-    for (let i = 0; i < this.user_names.length; i++) {
-      this.dropdownList.push({id: this.user_names[i].client_id, itemName: this.user_names[i].name});
-    }
-    console.log('this is myOptions', this.selectedItems );
+  this.popup.options = {
+    header: 'Your custom header',
+    color: '#5cb85c', // red, blue....
+    widthProsentage: 40, // The with of the popou measured by browser width
+    animationDuration: 1, // in seconds, 0 = no animation
+    showButtons: true, // You can hide this in case you want to use custom buttons
+    confirmBtnContent: 'OK', // The text on your confirm button
+    cancleBtnContent: 'Cancel', // the text on your cancel button
+    confirmBtnClass: 'btn btn-default', // your class for styling the confirm button
+    cancleBtnClass: 'btn btn-default', // you class for styling the cancel button
+    animation: 'fadeInDown' // 'fadeInLeft', 'fadeInRight', 'fadeInUp', 'bounceIn','bounceInDown'
+  };
 
+    this.dropdownList = [];
+ //   if (this.dropdownList.length === 0) {
+      for (let i = 0; i < this.user_names.length; i++) {
+        this.dropdownList.push({id: this.user_names[i].client_id, itemName: this.user_names[i].name, room: ''});
+      }
+ //   }
+  this.popup.show(this.popup.options);
 }
-
+popupConfirmClick () {
+    this.chatService.sendUserName(this.selectedUsers);
+    this.popup.hide();
+}
   sendMessage() {
-    this.chatService.sendMessage({name: this.nickname, msg: this.inputOrder.nodeValue.toString()});
+    this.chatService.sendMessage({name: this.nickname, msg: this.orderMessage});
     console.log(this.orderMessage);
   }
   sendMessageToRoom () {
@@ -59,14 +85,14 @@ popupShow() {
     this.chatService.getUserNames().subscribe((userObj) => { this.user_names = userObj; console.log(this.user_names); });
     this.chatService.getFromRoom().subscribe(message => {this.messages.push(message); console.log(this.messages); });
     this.chatService.getIsInRoom().subscribe(room => this.room = room);
+    this.chatService.getUsersInRoom().subscribe(users => {this.usersInRoom = users; console.log('users in room', this.usersInRoom)});
 
     this.route.params.subscribe(params => this.nickname = params['name']);
     // console.log(this.nickname);
 
   }
-  selectedUser (user) {
-    this.chatService.sendUserName(user);
-    console.log(user);
-    console.log(this.room);
+
+  ngOnDestroy() {
+    this.socket.emit('is_in_room', this.room);
   }
 }
