@@ -22,13 +22,18 @@ var selected_client;
 var room;
 var usersInRoom=[];
 var currentRoom2;
+
+
+
 function whoInRoom(room) {
   var currentRoom = io.sockets.adapter.rooms[room];
-  user_names.forEach(function (user) {
-    if(currentRoom.sockets[user.client_id] === true){
-      usersInRoom.push(user);
-    }
-  })
+  if(currentRoom) {
+    user_names.forEach(function (user) {
+      if (currentRoom.sockets[user.client_id] === true) {
+        usersInRoom.push(user);
+      }
+    })
+  }
 }
 
 io.on('connection', function (client) {
@@ -113,25 +118,27 @@ io.on('connection', function (client) {
   client.on('disconnect', function () {
     console.log(client.id);
     //console.log(user_names.length)
-    for(var i=0; i<user_names.length; i++){
-     // console.log(user_names[i]);
-      if(user_names[i].client_id === client.id){
-        console.log('user disconnected: ',user_names[i].name);
-        console.log(user_names.splice(i,1));
-        io.emit('user_names_ids',user_names);
-      }
-      if(user_names[i].room !== ''){
-        client.leave(user_names[i].room);
-        whoInRoom(user_names[i].room);
-        io.to(user_names[i].room).emit('users_in_room',usersInRoom);
-        console.log('users in room: ',usersInRoom);
-        usersInRoom = [];
+    if(user_names.length > 0) {
+      for (var i = 0; i < user_names.length; i++) {
+        // console.log(user_names[i]);
+        if (user_names[i].room !== '') {
+          client.leave(user_names[i].room);
+          whoInRoom(user_names[i].room);
+          io.to(user_names[i].room).emit('users_in_room', usersInRoom);
+          console.log('users in room: ', usersInRoom);
+          usersInRoom = [];
+        }
+        if (user_names[i].client_id === client.id) {
+          console.log('user disconnected: ', user_names[i].name);
+          console.log(user_names.splice(i, 1));
+          io.emit('user_names_ids', user_names);
+        }
+
       }
     }
 
 
-
-    console.log('on disconnect', user_names);
+    //console.log('on disconnect', user_names);
   });
 });
 

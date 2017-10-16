@@ -8,7 +8,17 @@ let source;
 
 export class ChatService {
    name: string;
+   flag: any = false;
   constructor(private socket: Socket) {}
+
+ /* setLogin (flag) {
+    if (flag === true) {
+      return this.flag = true;
+    }else {
+      return false;
+    }
+  }
+*/
   sendMessage(message) {
     this.socket.emit('message', message);
   }
@@ -44,6 +54,12 @@ export class ChatService {
   }
   getIsInRoom () {
     return this.socket.fromEvent('is_in_room');
+  }
+  setLoginFlag(value) {
+    this.flag = value;
+  }
+  getLoginFlag() {
+    return this.flag;
   }
 
 }

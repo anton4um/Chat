@@ -7,6 +7,7 @@ import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 
 
 
+
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -42,6 +43,8 @@ export class ChatComponent implements OnInit, OnDestroy {
 
 
   @ViewChild('inputOrder') inputOrder: HTMLElement;
+
+
   constructor(private popup: Popup, private chatService: ChatService, private socket: Socket, private route: ActivatedRoute) {
   }
 

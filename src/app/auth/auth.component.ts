@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {Socket} from 'ng-socket-io';
 import {ChatService} from '../ChatService';
 import {Router} from '@angular/router';
 
@@ -13,12 +12,15 @@ import {Router} from '@angular/router';
 })
 export class AuthComponent implements OnInit {
 name: string;
+
   constructor(private chatService: ChatService, private router: Router) { }
 Submit(name: string) {
     this.chatService.login(name);
     // console.log(name);
     this.router.navigate(['chat/', name]);
+    this.chatService.setLoginFlag(true);
 }
+
   ngOnInit() {
   }
 

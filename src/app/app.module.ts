@@ -9,9 +9,11 @@ import {PopupModule} from 'ng2-opd-popup';
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
 
+
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
 import { ChatComponent } from './chat/chat.component';
+import { LoginGuardComponent } from './login-guard/login-guard.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:8080', options: {} }
 const routes: Routes = [
@@ -21,13 +23,15 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {path : 'auth', component: AuthComponent},
-  {path: 'chat/:name', component: ChatComponent}
+  {path: 'chat', component: ChatComponent, canActivate: [LoginGuardComponent]},
+  {path: 'chat/:name', component: ChatComponent, canActivate: [LoginGuardComponent]}
   ]
 @NgModule({
   declarations: [
     AppComponent,
     AuthComponent,
-    ChatComponent
+    ChatComponent,
+    LoginGuardComponent,
   ],
   imports: [
     RouterModule.forRoot(routes),
@@ -39,7 +43,7 @@ const routes: Routes = [
     MultiselectDropdownModule,
     AngularMultiSelectModule,
   ],
-  providers: [ChatService],
+  providers: [ChatService, LoginGuardComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {
