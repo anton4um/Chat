@@ -3,14 +3,24 @@
   info{{message}}-{{message?.name}}:{{message?.msg}}
 </div>
 
-<popup (confirmClick)="popupConfirmClick()">
-
+<popup (confirmClick)="popupConfirmClick()" #popup_select_user>
   <angular2-multiselect [data]="dropdownList" [(ngModel)]="selectedUsers" [settings]="dropdownSettings">
-
   </angular2-multiselect>
 </popup>
-<input [(ngModel)]="orderMessage" #inputOrder /><button (click)="(room?.inRoom)?sendMessageToRoom():sendMessage()">Send</button>
+
+
+<popup #popup_invitation (confirmClick)="popupInvitationConfirmClick()" (cancelClick)="leavingTheRoom(invitation)">
+  <div>
+    <h5>you are now joined to the room: {{invitation?.room}}</h5>
+    <p>if you want to leave click Cancel</p>
+    <p>if you want to stay click OK</p>
+  </div>
+</popup>
+
+<input [(ngModel)]="orderMessage" #inputOrder />
+<button (click)="(invitation?.inRoom)?sendMessageToRoom():sendMessage()">Send</button>
 <button (click)="popupShow()">Добавить пользователей в комнату</button>
+<button (click)="leavingTheRoom(invitation)">Leave the Room</button>
 <div *ngFor="let user of user_names">
     {{user?.name}}
 </div>

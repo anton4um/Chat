@@ -5,9 +5,8 @@ import { HttpModule} from '@angular/http';
 import {SocketIoModule, SocketIoConfig} from 'ng-socket-io';
 import {ChatService} from './ChatService';
 import {Routes, RouterModule} from '@angular/router';
-import {PopupModule} from 'ng2-opd-popup';
-import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
-import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
+import {PopupModule} from 'D:\\ProgramFiles\\Chat\\node_modules\\ng2-opd-popup';
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
 
 
 import { AppComponent } from './app.component';
@@ -40,7 +39,6 @@ const routes: Routes = [
     HttpModule,
     SocketIoModule.forRoot(config),
     PopupModule.forRoot(),
-    MultiselectDropdownModule,
     AngularMultiSelectModule,
   ],
   providers: [ChatService, LoginGuardComponent],

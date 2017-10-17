@@ -31,6 +31,7 @@ export class ChatService {
 
 
 
+
   getUsersInRoom(){
     return this.socket.fromEvent('users_in_room');
   }
@@ -52,9 +53,13 @@ export class ChatService {
   getFromRoom () {
     return this.socket.fromEvent('from_room');
   }
-  getIsInRoom () {
+  getInvitation () {
     return this.socket.fromEvent('is_in_room');
   }
+
+
+
+
   setLoginFlag(value) {
     this.flag = value;
   }

@@ -17,30 +17,33 @@ app.get('/',function (req, res) {
 var messages = [];
 var user_names = [];
 var client_id;
-var obj = {};
+
 var selected_client;
 var room;
 var usersInRoom=[];
-var currentRoom2;
+
 
 
 
 function whoInRoom(room) {
   var currentRoom = io.sockets.adapter.rooms[room];
+  console.log('current room in whoInRoom: ', currentRoom);
   if(currentRoom) {
     user_names.forEach(function (user) {
       if (currentRoom.sockets[user.client_id] === true) {
         usersInRoom.push(user);
       }
     })
+    console.log('Users in Room: ', usersInRoom)
   }
+  return usersInRoom;
 }
 
 io.on('connection', function (client) {
       if(user_names.length > 0) {
         io.emit('user_names_ids', user_names);
       }
-  console.log(user_names);
+  //console.log(user_names);
   console.log('Connected');
   client.on('login', function (data) {
       user_names.push({name: data ,client_id:  client.id, room: ''});
@@ -78,27 +81,41 @@ io.on('connection', function (client) {
       //console.log(usersInRoom);
       //console.log('rooms from adapter room',io.sockets.adapter.rooms[room]);
       io.to(room).emit('message',' you are joined to room: '+room);
+
+      //client.emit('is_in_room', {inRoom: true, room: room});
       io.to(room).emit('is_in_room',{inRoom: true, room: room});
+
       io.to(room).emit('users_in_room',usersInRoom);
       console.log('users in room: ',usersInRoom);
-      console.log('user_names: ',user_names);
+      //console.log('user_names: ',user_names);
       usersInRoom = [];
     console.log('rooms from io',io.sockets.adapter.rooms);
 
-    console.log('you are now leaved all rooms',client.rooms);
+    //console.log('you are now leaved all rooms',client.rooms);
+
 
   });
 
+  client.on('is_in_room', function (data) {
+    if(data.inRoom === false){
+      client.leave(data.room);
+      console.log('user left the room: ', client.id);
+      var users;
+      users = whoInRoom(data.room);
+      io.to(data.room).emit('users_in_room',users);
+      console.log('rooms from io',io.sockets.adapter.rooms);
+    }
+  });
+
   client.on('from_room', function (data) {
-      console.log(data);
+      console.log('From Room: ',data);
       io.to(data.room).emit('from_room',{name: data.name, msg: data.msg});
     });
 
 
   client.on('message',function (data) {
       console.log('data is: ',data.name +' ' + data.msg);
-      //client.emit('message',{hello: 'Hello ' + data});
-      io.emit('message',data);//{hello: 'привет от' + data});
+      io.emit('message',data);
       messages.push(data);
       console.log('sanded');
 
@@ -106,15 +123,7 @@ io.on('connection', function (client) {
     });
 
 
-  /*client.on('is_in_room', function (data) {
-  //  console.log('current room: ',data.room);
-    currentRoom2 = data.room;
-    console.log(currentRoom2);
 
-    console.log('on disconnect user from room', usersInRoom);
-
-  });
-  */
   client.on('disconnect', function () {
     console.log(client.id);
     //console.log(user_names.length)
