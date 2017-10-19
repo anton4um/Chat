@@ -80,7 +80,7 @@ io.on('connection', function (client) {
       whoInRoom(room);
       //console.log(usersInRoom);
       //console.log('rooms from adapter room',io.sockets.adapter.rooms[room]);
-      io.to(room).emit('message',' you are joined to room: '+room);
+      io.to(room).emit('message','INFO: you are joined to room: '+room);
 
       //client.emit('is_in_room', {inRoom: true, room: room});
       io.to(room).emit('is_in_room',{inRoom: true, room: room});
@@ -97,13 +97,15 @@ io.on('connection', function (client) {
   });
 
   client.on('is_in_room', function (data) {
-    if(data.inRoom === false){
-      client.leave(data.room);
-      console.log('user left the room: ', client.id);
-      var users;
-      users = whoInRoom(data.room);
-      io.to(data.room).emit('users_in_room',users);
-      console.log('rooms from io',io.sockets.adapter.rooms);
+    if(data) {
+      if (data.inRoom === false) {
+        client.leave(data.room);
+        console.log('user left the room: ', client.id);
+        var users;
+        users = whoInRoom(data.room);
+        io.to(data.room).emit('users_in_room', users);
+        console.log('rooms from io', io.sockets.adapter.rooms);
+      }
     }
   });
 

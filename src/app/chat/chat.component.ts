@@ -3,7 +3,7 @@ import {Socket} from 'ng-socket-io';
 import {ChatService} from '../ChatService';
 import {ActivatedRoute} from '@angular/router';
 import {Popup} from 'ng2-opd-popup';
-// import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
+
 
 
 
