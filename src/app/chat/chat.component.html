@@ -1,6 +1,8 @@
 
-<div *ngFor="let message of messages">
+<div *ngFor="let message of messages" >
+  <div *ngIf="(message?.name === nickname) ? f = 'right' : f='left' " align=f>
   info{{message}}-{{message?.name}}:{{message?.msg}}
+  </div>
 </div>
 
 <popup (confirmClick)="popupConfirmClick()" #popup_select_user>
@@ -19,7 +21,7 @@
 
 <input [(ngModel)]="orderMessage" #inputOrder />
 <button (click)="(invitation?.inRoom)?sendMessageToRoom():sendMessage()">Send</button>
-<button (click)="popupShow()">Добавить пользователей в комнату</button>
+<button (click)="popupShow()">Add Users to Room</button>
 <button (click)="leavingTheRoom(invitation)">Leave the Room</button>
 <div *ngFor="let user of user_names">
     {{user?.name}}

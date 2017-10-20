@@ -15,6 +15,7 @@ import {Popup} from 'ng2-opd-popup';
 
 })
 export class ChatComponent implements OnInit, OnDestroy {
+  f: any;
   data: any;
   messages0: any;
   messages = [];
