@@ -5,7 +5,7 @@ import { HttpModule} from '@angular/http';
 import {SocketIoModule, SocketIoConfig} from 'ng-socket-io';
 import {ChatService} from './ChatService';
 import {Routes, RouterModule} from '@angular/router';
-import {PopupModule} from 'ng2-opd-popup';
+import {PopupModule} from 'E:\\ProgramFiles\\Chat\\node_modules\\ng2-opd-popup';
 import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
 
 

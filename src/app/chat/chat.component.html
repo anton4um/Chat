@@ -11,13 +11,13 @@
     <p>if you want to stay click OK</p>
   </div>
 </popup>
-
+<!--=====================================================================================-->
 <div *ngFor="let message of messages">
   <div *ngIf="!message.hasOwnProperty('name')" class="bg-danger">{{message}}</div>
   <div class="row">
-      <div id="messagebox" class="col-md-4 col-md-offset-2">
-        <div align="top left"><h4>{{message?.name}}</h4></div>
-        <div class="bg-success" align="center">{{message?.msg}}</div>
+      <div id="messagebox" class="col-md-6 col-md-offset-2">
+        <h4 align="top left" id="massage1">{{message?.name}}</h4>
+        <p class="bg-success" align="center" id="massage2">{{message?.msg}}</p>
       </div>
   </div>
 </div>
