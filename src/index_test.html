@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost:8080');
+  socket.on('message',function (data) {
+    alert(data.hello);
+  });
+  //socket.emit('message','John');
+
+  function getName() {
+    var name = prompt('Ваше имя','Гость');
+    if(name){
+        socket.emit('message',name);
+    }
+  }
+</script>
+<button type="submit" onclick="getName()">Представьтесь</button>
+</body>
+</html>

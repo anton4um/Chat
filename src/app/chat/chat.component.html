@@ -1,0 +1,44 @@
+<popup (confirmClick)="popupConfirmClick()" #popup_select_user>
+  <angular2-multiselect [data]="dropdownList" [(ngModel)]="selectedUsers" [settings]="dropdownSettings">
+  </angular2-multiselect>
+</popup>
+
+
+<popup #popup_invitation (confirmClick)="popupInvitationConfirmClick()" (cancelClick)="leavingTheRoom(invitation)">
+  <div>
+    <h5>you are now joined to the room: {{invitation?.room}}</h5>
+    <p>if you want to leave click Cancel</p>
+    <p>if you want to stay click OK</p>
+  </div>
+</popup>
+
+<div *ngFor="let message of messages">
+  <div *ngIf="!message.hasOwnProperty('name')" class="bg-danger">{{message}}</div>
+  <div class="row">
+      <div id="messagebox" class="col-md-4 col-md-offset-2">
+        <div align="top left"><h4>{{message?.name}}</h4></div>
+        <div class="bg-success" align="center">{{message?.msg}}</div>
+      </div>
+  </div>
+</div>
+
+<input [(ngModel)]="orderMessage">
+<button (click)="(invitation?.inRoom)?sendMessageToRoom():sendMessage()">Send</button>
+
+<div class="btn-group">
+  <button class="dropdown-toggle" data-toggle="dropdown">
+    Меню<span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+      <li><button (click)="popupShow()">Добавить пользователей в комнату</button></li>
+      <li><button (click)="leavingTheRoom(invitation)">Leave the Room</button></li>
+  </ul>
+</div>
+
+  <div *ngFor="let user of user_names">
+    {{user?.name}}
+</div>
+<p>Users in ROOM:</p>
+<div *ngFor="let userInRoom of usersInRoom">
+  {{userInRoom.name}}
+</div>
