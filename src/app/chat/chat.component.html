@@ -12,33 +12,58 @@
   </div>
 </popup>
 <!--=====================================================================================-->
-<div *ngFor="let message of messages">
-  <div *ngIf="!message.hasOwnProperty('name')" class="bg-danger">{{message}}</div>
+<div class="container" id="container">
   <div class="row">
-      <div id="messagebox" class="col-md-6 col-md-offset-2">
-        <h4 align="top left" id="massage1">{{message?.name}}</h4>
-        <p class="bg-success" align="center" id="massage2">{{message?.msg}}</p>
+
+    <div class="panel-group col-xs-4 col-sm-4 col-md-4 col-lg-4" id="infoUsers">
+      <div class="panel panel-primary">
+        <div class="panel-heading">Users in Chat</div>
+        <div *ngFor="let user of user_names" class="panel-body">
+          {{user?.name}}
+        </div>
       </div>
+      <div class="panel panel-primary">
+        <div class="panel-heading">Users in ROOM:</div>
+        <div *ngFor="let userInRoom of usersInRoom" class="panel-body">
+          {{userInRoom.name}}
+        </div>
+      </div>
+    </div>
+
+    <!--<div
+          class="conversation-wrap col-xs-6 col-xs-offset-2 col-md-6 col-md-offset-3 col-lg-10 col-lg-5 col-lg-offset-2"
+          id="messageBox">-->
+      <div *ngFor="let message of messages">
+        <div id="massage" class="col-xs-6 col-xs-offset-6 col-md-6 col-md-offset-8 col-lg-10 col-lg-5 col-lg-offset-6">
+                <div *ngIf="!message.hasOwnProperty('name')" class="bg-danger">{{message}}</div>
+            <div align="top left" id="massageName">{{message?.name}}</div>
+          <div class="bg-success" align="center" id="massageMassage">
+              {{message?.msg}}
+          </div>
+        </div>
+      </div>
+    <!--</div>-->
+
+      <div  id="wrapInputMassage"
+            class="col-xs-6 col-xs-offset-6 col-md-6 col-md-offset-8 col-lg-10 col-lg-5 col-lg-offset-6">
+        <input [(ngModel)]="orderMessage"  id="inputMassage"
+               (keydown.enter)="(invitation?.inRoom)?sendMessageToRoom():sendMessage()" >
+        <button (click)="(invitation?.inRoom)?sendMessageToRoom():sendMessage()" class="btn btn-default">Send</button>
+      </div>
+
+
+
   </div>
 </div>
-
-<input [(ngModel)]="orderMessage">
-<button (click)="(invitation?.inRoom)?sendMessageToRoom():sendMessage()">Send</button>
-
-<div class="btn-group">
+<!--==============================================================================================-->
+<!--<div class="btn-group" align="top right">
   <button class="dropdown-toggle" data-toggle="dropdown">
     Меню<span class="caret"></span>
   </button>
   <ul class="dropdown-menu">
-      <li><button (click)="popupShow()">Добавить пользователей в комнату</button></li>
-      <li><button (click)="leavingTheRoom(invitation)">Leave the Room</button></li>
+    <li><button (click)="popupShow()">Добавить пользователей в комнату</button></li>
+    <li><button (click)="leavingTheRoom(invitation)">Leave the Room</button></li>
   </ul>
-</div>
+</div>-->
 
-  <div *ngFor="let user of user_names">
-    {{user?.name}}
-</div>
-<p>Users in ROOM:</p>
-<div *ngFor="let userInRoom of usersInRoom">
-  {{userInRoom.name}}
-</div>
+

@@ -147,7 +147,9 @@ io.on('connection', function (client) {
 
       }
     }
-
+    if(io.sockets.connected === []){
+      user_names = [];
+    }
 
     //console.log('on disconnect', user_names);
   });

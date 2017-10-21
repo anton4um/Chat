@@ -1,17 +1,50 @@
-#messagebox{
+#messageBox{
 
-  border: 1px black solid;
-  align: center;
-  width: 50%;
 
+  height: auto;
 }
-#massage1{
-
+#massage{
+  border: 1px black solid;
+  /* align: center;*/
+  width: 50%;
+  margin-top: 15px;
+  height: auto;
+}
+#massageName{
+  height: auto;
   padding-right: 0px;
   padding-left: 0px;
+  margin: 0px 0px 0px;
+  align: center;
+  width: 100%;
 }
-#massage2{
+#massageMassage{
   margin: 0px -15px 0px;
   padding-right: 0px;
   padding-left: 0px;
+  height: auto;
+
+}
+
+#inputMassage{
+  border-radius: 6px;
+  width: 50%;
+  margin: 0px 0px 0px 0px;
+  padding-right: 0px;
+  padding-left: 0px;
+  height: auto;
+}
+
+#wrapInputMassage{
+ /* margin-left: 50%;*/
+  width: 50%;
+  padding-left: 0px;
+  height: auto;
+}
+#container{
+  margin: 0px 0px 0px;
+}
+#infoUsers{
+  width: 15%;
+  position: fixed;
 }
