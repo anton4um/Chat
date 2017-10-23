@@ -116,7 +116,7 @@ io.on('connection', function (client) {
 
 
   client.on('message',function (data) {
-      console.log('data is: ',data.name +' ' + data.msg);
+      console.log('data is: ',data);
       io.emit('message',data);
       messages.push(data);
       console.log('sanded');

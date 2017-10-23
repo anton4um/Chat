@@ -1,0 +1,20 @@
+<div id="massage" *ngIf="flagForMassage"
+     [ngClass]="{'panel panel-success col-xs-6 col-xs-offset-6 col-md-6 col-md-offset-8 col-lg-10 col-lg-offset-6':true}">
+  <div *ngIf="!inputMassage.hasOwnProperty('name')" class="bg-danger">{{inputMassage}}</div>
+  <div align="top left" id="massageName" class="panel-heading">
+    {{inputMassage?.name}}
+  </div>
+  <div class="panel-body" align="center" id="massageMassage">
+    {{inputMassage?.msg}}
+  </div>
+</div>
+<div id="massage_false" *ngIf="!flagForMassage"
+     [ngClass]="{'panel panel-primary col-xs-6 col-xs-offset-6 col-md-6 col-md-offset-8 col-lg-10 col-lg-offset-6':true}">
+  <div *ngIf="!inputMassage.hasOwnProperty('name')" class="bg-danger">{{inputMassage}}</div>
+  <div align="top left" id="massageName_false" class="panel-heading">
+    {{inputMassage?.name}}
+  </div>
+  <div class="panel-body" align="center" id="massageMassage_false">
+    {{inputMassage?.msg}}
+  </div>
+</div>

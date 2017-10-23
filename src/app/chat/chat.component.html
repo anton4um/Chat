@@ -12,6 +12,8 @@
   </div>
 </popup>
 <!--=====================================================================================-->
+
+
 <div class="container" id="container">
   <div class="row">
 
@@ -28,32 +30,52 @@
           {{userInRoom.name}}
         </div>
       </div>
-    </div>
-
-    <!--<div
-          class="conversation-wrap col-xs-6 col-xs-offset-2 col-md-6 col-md-offset-3 col-lg-10 col-lg-5 col-lg-offset-2"
-          id="messageBox">-->
-      <div *ngFor="let message of messages">
-        <div id="massage" class="col-xs-6 col-xs-offset-6 col-md-6 col-md-offset-8 col-lg-10 col-lg-5 col-lg-offset-6">
-                <div *ngIf="!message.hasOwnProperty('name')" class="bg-danger">{{message}}</div>
-            <div align="top left" id="massageName">{{message?.name}}</div>
-          <div class="bg-success" align="center" id="massageMassage">
-              {{message?.msg}}
+      <div class="container">
+        <div class="btn-group ">
+          <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            Menu<span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><button class="btn btn-default" (click)="popupShow()">Add Users in Room</button></li>
+            <li><button class="btn btn-default" (click)="leavingTheRoom(invitation)">Leave this Room</button></li>
+          </ul>
+        </div>
+      </div>
+      <!--
+      <div class="navbar navbar-default col-xs-12 col-sm-12 col-md-12 col-lg-24">
+        <div class="container">
+          <div class="navbar header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#responsive-menu">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div class="collapse navbar-collapse " id="responsive-menu">
+            <ul class="nav navbar-menu ">
+              <li><button class="btn btn-default" (click)="popupShow()">Add Users to Room</button></li>
+              <li><button class="btn btn-default" (click)="leavingTheRoom(invitation)">Leave this Room</button></li>
+            </ul>
           </div>
         </div>
       </div>
-    <!--</div>-->
+    </div>-->
+    </div>
+      <div *ngFor="let massage of massages" class="panel-group">
+        <app-massage [inputMassage]="massage" [inputUuid]="uuid"></app-massage>
+      </div>
 
       <div  id="wrapInputMassage"
             class="col-xs-6 col-xs-offset-6 col-md-6 col-md-offset-8 col-lg-10 col-lg-5 col-lg-offset-6">
-        <input [(ngModel)]="orderMessage"  id="inputMassage"
+        <input class="form-control" [(ngModel)]="orderMessage"  id="inputMassage"
                (keydown.enter)="(invitation?.inRoom)?sendMessageToRoom():sendMessage()" >
         <button (click)="(invitation?.inRoom)?sendMessageToRoom():sendMessage()" class="btn btn-default">Send</button>
       </div>
 
 
 
-  </div>
+
+</div>
 </div>
 <!--==============================================================================================-->
 <!--<div class="btn-group" align="top right">
@@ -64,6 +86,17 @@
     <li><button (click)="popupShow()">Добавить пользователей в комнату</button></li>
     <li><button (click)="leavingTheRoom(invitation)">Leave the Room</button></li>
   </ul>
-</div>-->
+</div>
+
+  <div class="btn-group">
+    <button class="btn btn-default" class="dropdown-toggle" data-toggle="dropdown">
+      Menu<span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li><button class="btn btn-default" (click)="popupShow()">Добавить пользователей в комнату</button></li>
+      <li><button class="btn btn-default" (click)="leavingTheRoom(invitation)">Leave the Room</button></li>
+    </ul>
+  </div>
+-->
 
 

@@ -3,10 +3,8 @@ import {Socket} from 'ng-socket-io';
 import {ChatService} from '../ChatService';
 import {ActivatedRoute} from '@angular/router';
 import {Popup} from 'ng2-opd-popup';
-
-
-
-
+import { UUID } from 'angular2-uuid';
+import {MassageComponent} from "../massage/massage.component";
 
 @Component({
   selector: 'app-chat',
@@ -15,22 +13,18 @@ import {Popup} from 'ng2-opd-popup';
 
 })
 export class ChatComponent implements OnInit, OnDestroy {
-  data: any;
-  messages0: any;
-  messages = [];
-  // private_msg = []
+
+  massages = [];
   nickname: any;
   orderMessage: any;
-  message: any;
   user_names = [];
-  obj: any;
   sockets: any;
   invitation: any;
-
+  uuid: any;
   usersInRoom: any;
   dropdownList = [];
   selectedUsers = [];
-
+  flagForMassage: any = true;
 
   dropdownSettings = {
     singleSelection: false,
@@ -45,6 +39,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   @ViewChild('inputOrder') inputOrder: HTMLElement;
   @ViewChild('popup_select_user') popup_select_user: Popup;
   @ViewChild('popup_invitation') popup_invitation: Popup;
+  @ViewChild('draftMassage') divMassage: HTMLElement;
   constructor( private chatService: ChatService, private socket: Socket, private route: ActivatedRoute) {
   }
 
@@ -71,11 +66,9 @@ popupShow() {
   };
 
     this.dropdownList = [];
- //   if (this.dropdownList.length === 0) {
       for (let i = 0; i < this.user_names.length; i++) {
         this.dropdownList.push({id: this.user_names[i].client_id, itemName: this.user_names[i].name, room: ''});
       }
- //   }
   this.popup_select_user.show(this.popup_select_user.options);
 }
 
@@ -91,8 +84,19 @@ popupInvitationConfirmClick(){
 
 
   sendMessage() {
-    this.chatService.sendMessage({name: this.nickname, msg: this.orderMessage});
+    this.chatService.sendMessage({name: this.nickname, msg: this.orderMessage, msg_owner: this.uuid});
     console.log(this.orderMessage);
+    console.log('DivMessage',this.divMassage,' this.massages', this.massages, 'uuid: ', this.uuid );
+    if(this.massages[this.massages.length-1].msg_owner === this.uuid){
+      //this.divMassage.classList = 'panel panel-primary';
+      this.flagForMassage = true;
+      console.log('true');
+      console.log(this.divMassage);
+    }else{
+      //this.divMassage.nativeElement.outerHTML.class = 'panel panel-info';
+      this.flagForMassage = false;
+      console.log('false')
+    }
 
   }
   sendMessageToRoom () {
@@ -100,10 +104,15 @@ popupInvitationConfirmClick(){
     console.log('sanded to room');
   }
   ngOnInit() {
-    this.chatService.getMessage().subscribe(message => {this.messages.push(message); console.log(this.messages); });
-    this.chatService.getPrivet().subscribe(data => {this.messages.push(data); console.log(this.messages); });
+    this.uuid = UUID.UUID();
+    this.chatService.getMessage().subscribe(massage => {this.massages.push(massage);
+                                                            console.log(this.massages);
+
+
+    });
+    this.chatService.getPrivet().subscribe(data => {this.massages.push(data); console.log(this.massages); });
     this.chatService.getUserNames().subscribe((userObj) => { this.user_names = userObj; console.log(this.user_names); });
-    this.chatService.getFromRoom().subscribe(message => {this.messages.push(message); console.log(this.messages); });
+    this.chatService.getFromRoom().subscribe(message => {this.massages.push(message); console.log(this.massages); });
     this.chatService.getInvitation().subscribe((invitation) => {this.invitation = invitation;
                                                                     this.popup_invitation.show()});
     this.chatService.getUsersInRoom().subscribe(users => {this.usersInRoom = users; console.log('users in room', this.usersInRoom)});

@@ -1,0 +1,46 @@
+#massage{
+
+  /* align: center;*/
+  width: 50%;
+  margin-top: 15px;
+  height: auto;
+  padding: 0px 0px 0px 0px;
+}
+#massageName{
+  height: auto;
+  padding-right: 0px;
+  padding-left: 0px;
+  margin: 0px 0px 0px;
+  align: center;
+  width: 100%;
+}
+#massageMassage{
+  margin: 0px -15px 0px;
+  padding-right: 0px;
+  padding-left: 0px;
+  height: auto;
+
+}
+#massage_false{
+
+  /* align: center;*/
+  width: 50%;
+  margin-top: 15px;
+  height: auto;
+  padding: 0px 0px 0px 0px;
+}
+#massageName_false{
+  height: auto;
+  padding-right: 0px;
+  padding-left: 0px;
+  margin: 0px 0px 0px;
+  align: center;
+  width: 100%;
+}
+#massageMassage_false{
+  margin: 0px -15px 0px;
+  padding-right: 0px;
+  padding-left: 0px;
+  height: auto;
+
+}
