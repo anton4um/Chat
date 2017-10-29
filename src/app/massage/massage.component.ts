@@ -5,6 +5,8 @@ import {Component, Input, OnInit} from '@angular/core';
   templateUrl: './massage.component.html',
   styleUrls: ['./massage.component.css']
 })
+
+
 export class MassageComponent implements OnInit {
   @Input() inputMassage: any;
   @Input() inputUuid: any;

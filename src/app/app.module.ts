@@ -14,6 +14,7 @@ import { AuthComponent } from './auth/auth.component';
 import { ChatComponent } from './chat/chat.component';
 import { LoginGuardComponent } from './login-guard/login-guard.component';
 import { MassageComponent } from './massage/massage.component';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:8080', options: {} }
 const routes: Routes = [
@@ -27,16 +28,8 @@ const routes: Routes = [
   {path : 'auth', component: AuthComponent},
   {path: 'chat', component: ChatComponent, canActivate: [LoginGuardComponent]},
   {path: 'chat/:name', component: ChatComponent, canActivate: [LoginGuardComponent]},
-  {
-    path: 'chat',
-    redirectTo: '/auth',
-    pathMatch: 'full'
-  },
-  {
-    path: 'chat/:name',
-    redirectTo: '/auth',
-    pathMatch: 'full'
-  },
+  {path: 'admin', component: AdminPanelComponent},
+
   ]
 @NgModule({
   declarations: [
@@ -46,6 +39,8 @@ const routes: Routes = [
     LoginGuardComponent,
 
     MassageComponent,
+
+    AdminPanelComponent,
   ],
   imports: [
     RouterModule.forRoot(routes),

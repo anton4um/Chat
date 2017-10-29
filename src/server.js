@@ -17,7 +17,7 @@ app.get('/',function (req, res) {
 var messages = [];
 var user_names = [];
 var client_id;
-
+var socketListToRemove = [];
 var selected_client;
 var room;
 var usersInRoom=[];
@@ -27,31 +27,46 @@ var usersInRoom=[];
 
 function whoInRoom(room) {
   var currentRoom = io.sockets.adapter.rooms[room];
-  console.log('current room in whoInRoom: ', currentRoom);
+  usersInRoom = [];
+  //console.log('current room in whoInRoom: ', currentRoom);
   if(currentRoom) {
-    user_names.forEach(function (user) {
+    /*user_names.forEach(function (user) {
       if (currentRoom.sockets[user.client_id] === true) {
         usersInRoom.push(user);
       }
-    })
-    console.log('Users in Room: ', usersInRoom)
+    });*/
+    for(var i=0; i<user_names.length;i++)
+    {
+      if(currentRoom.sockets[user_names[i].client_id] === true){
+        usersInRoom.push(user_names[i]);
+        //console.log('user names to push: ',user_names[i])
+      }
+    }
+    //console.log('Users in Room: ', usersInRoom)
   }
   return usersInRoom;
 }
 
 io.on('connection', function (client) {
-      if(user_names.length > 0) {
-        io.emit('user_names_ids', user_names);
-      }
+
+
+
+  if(user_names.length > 0) {
+    io.emit('user_names_ids', user_names);
+    //console.log('users from connected io',user_names)
+  }
   //console.log(user_names);
   console.log('Connected');
+
   client.on('login', function (data) {
       user_names.push({name: data ,client_id:  client.id, room: ''});
       console.log('User connected', user_names);
+
+      //console.log('connected from IO: ',io.sockets.connected);
       io.emit('user_names_ids',user_names);
 
+  });
 
-    });
   client.on('user_names_ids', function (data) {
     console.log('data is in user_names_ids: ',data);
 
@@ -86,10 +101,10 @@ io.on('connection', function (client) {
       io.to(room).emit('is_in_room',{inRoom: true, room: room});
 
       io.to(room).emit('users_in_room',usersInRoom);
-      console.log('users in room: ',usersInRoom);
+      //console.log('users in room: ',usersInRoom);
       //console.log('user_names: ',user_names);
       usersInRoom = [];
-    console.log('rooms from io',io.sockets.adapter.rooms);
+    //console.log('rooms from io',io.sockets.adapter.rooms);
 
     //console.log('you are now leaved all rooms',client.rooms);
 
@@ -100,35 +115,44 @@ io.on('connection', function (client) {
     if(data) {
       if (data.inRoom === false) {
         client.leave(data.room);
-        console.log('user left the room: ', client.id);
+        //console.log('user left the room: ', client.id);
         var users;
         users = whoInRoom(data.room);
         io.to(data.room).emit('users_in_room', users);
-        console.log('rooms from io', io.sockets.adapter.rooms);
+        //console.log('rooms from io', io.sockets.adapter.rooms);
       }
     }
   });
 
   client.on('from_room', function (data) {
-      console.log('From Room: ',data);
+      //console.log('From Room: ',data);
       io.to(data.room).emit('from_room',{name: data.name, msg: data.msg});
     });
 
 
   client.on('message',function (data) {
-      console.log('data is: ',data);
+      //console.log('data is: ',data);
       io.emit('message',data);
       messages.push(data);
-      console.log('sanded');
 
 
     });
 
+  client.on('users_to_disconnect',function (data) {
+    console.log('users to disconnect',data);
+    console.log(io);
+    if(data) {
+      for (var i = 0; i < data.length; i++) {
+        io.sockets.connected[[data[i].id]].disconnect();
+      }
+    }
+  });
+
 
 
   client.on('disconnect', function () {
-    console.log(client.id);
-    //console.log(user_names.length)
+    console.log('to disconnect',client.id);
+    console.log('user_names length',user_names.length)
     if(user_names.length > 0) {
       for (var i = 0; i < user_names.length; i++) {
         // console.log(user_names[i]);
@@ -136,7 +160,7 @@ io.on('connection', function (client) {
           client.leave(user_names[i].room);
           whoInRoom(user_names[i].room);
           io.to(user_names[i].room).emit('users_in_room', usersInRoom);
-          console.log('users in room: ', usersInRoom);
+          //console.log('users in room: ', usersInRoom);
           usersInRoom = [];
         }
         if (user_names[i].client_id === client.id) {
@@ -151,7 +175,7 @@ io.on('connection', function (client) {
       user_names = [];
     }
 
-    //console.log('on disconnect', user_names);
+    console.log('on disconnect', user_names);
   });
 });
 

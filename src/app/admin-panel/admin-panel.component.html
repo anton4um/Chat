@@ -1,0 +1,5 @@
+<popup (confirmClick)="popupConfirmClick()" #sockets_to_remove>
+  <angular2-multiselect [data]="dropdownList" [(ngModel)]="socketListToRemove" [settings]="dropdownSettings">
+  </angular2-multiselect>
+</popup>
+<button (click)="showPopup()">Select Users To Disconnect</button>

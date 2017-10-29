@@ -19,7 +19,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   orderMessage: any;
   user_names = [];
   sockets: any;
-  invitation: any;
+  invitation: any = {};
   uuid: any;
   usersInRoom: any;
   dropdownList = [];
@@ -70,9 +70,15 @@ popupShow() {
         this.dropdownList.push({id: this.user_names[i].client_id, itemName: this.user_names[i].name, room: ''});
       }
   this.popup_select_user.show(this.popup_select_user.options);
+
 }
 
 popupConfirmClick () {
+    if(this.invitation.inRoom) {
+      this.leavingTheRoom(this.invitation);
+      console.log(this.invitation);
+    }
+
     this.chatService.sendUserName(this.selectedUsers);
     this.popup_select_user.hide();
 }
@@ -105,11 +111,12 @@ popupInvitationConfirmClick(){
   }
   ngOnInit() {
     this.uuid = UUID.UUID();
-    this.chatService.getMessage().subscribe(massage => {this.massages.push(massage);
-                                                            console.log(this.massages);
 
+    this.invitation = {inRoom: false, room: ''};
 
-    });
+    this.chatService.getMessage().subscribe(massage => {
+      if(!this.invitation.inRoom){this.massages.push(massage);}
+                                                            console.log(this.massages);});
     this.chatService.getPrivet().subscribe(data => {this.massages.push(data); console.log(this.massages); });
     this.chatService.getUserNames().subscribe((userObj) => { this.user_names = userObj; console.log(this.user_names); });
     this.chatService.getFromRoom().subscribe(message => {this.massages.push(message); console.log(this.massages); });
@@ -121,7 +128,6 @@ popupInvitationConfirmClick(){
     // console.log(this.nickname);
 
   }
-
   ngOnDestroy() {
     this.socket.emit('is_in_room', this.invitation);
   }
